@@ -46,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
           List<Widget> children;
           if(snapshot.hasData) {
             children = <Widget>[
-              // Guess(onPressed: () => {}),
+              Guess(onPressed: () => {}),
               DescriptionBox(house: snapshot.requireData),
               ImagePanel(house: snapshot.requireData)
             ];
