@@ -60,7 +60,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 showGuessDialog(context, guess, snapshot.requireData.price),
                 this.setState(() {})
               }),
+              Spacer(),
               DescriptionBox(house: snapshot.requireData),
+              Spacer(),
               ImagePanel(house: snapshot.requireData)
             ];
           } 
