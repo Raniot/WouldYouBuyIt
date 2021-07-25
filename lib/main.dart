@@ -67,11 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
           //Make error handling -> else if(snapshot.hasError)
           else {
             children = const <Widget>[
-              SizedBox(
-                child: CircularProgressIndicator(),
-                width: 60,
-                height: 60,
-              )
+              CircularProgressIndicator(),
             ];
           }
           return Center(
