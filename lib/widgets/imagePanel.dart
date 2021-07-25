@@ -16,15 +16,15 @@ class ImagePanel extends StatelessWidget {
     var images = house.imageData;
 
     return SizedBox(
-      height: 300,
+      height: 250,
       width: 300,
       child: PhotoViewGallery.builder(
         itemCount: images.length, 
         scrollPhysics: const BouncingScrollPhysics(),
         builder: (BuildContext context, int index) {
           return PhotoViewGalleryPageOptions(
-            imageProvider: NetworkImage(house.imageData[index].largeImageUrl),
-            initialScale: PhotoViewComputedScale.contained
+            imageProvider: NetworkImage(images[index].largeImageUrl),
+            initialScale: PhotoViewComputedScale.contained,
           );
         },
         loadingBuilder: (context, event) => Center(
@@ -42,16 +42,4 @@ class ImagePanel extends StatelessWidget {
       ),
     );
   }
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Expanded(
-  //     child: SizedBox(
-  //       child: ListView(
-  //         scrollDirection: Axis.horizontal,
-  //         children: getHouseImages(house),
-  //       )
-  //     )
-  //   );
-  // }
 }
