@@ -7,11 +7,7 @@ class WouldYouBuyItService {
   final Uri _url = Uri(host: 'localhost', path: "api/house", port: 5000, scheme: 'http');
 
   Future<House> getHouse() async {
-    var response = await http.get(Uri.parse('http://localhost:5000/api/house'),
-    headers: {
-          "Accept": "application/json",
-          "Access-Control_Allow_Origin": "*"
-        });
+    var response = await http.get(Uri.parse('http://192.168.86.195:5000/api/house'));
     if(response.statusCode != 200)
       throw new Exception('Error from backend ${response.body}');
     

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:would_you_buy_it/description.dart';
+import 'package:would_you_buy_it/widgets/description.dart';
 
 void main() {
   runApp(MyApp());

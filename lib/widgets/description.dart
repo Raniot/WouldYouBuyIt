@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:would_you_buy_it/WouldYouBuyItService.dart';
+import 'package:would_you_buy_it/services/WouldYouBuyItService.dart';
 import 'package:would_you_buy_it/models/house.dart';
 
 class DescriptionBox extends StatelessWidget {
@@ -9,10 +9,10 @@ class DescriptionBox extends StatelessWidget {
     return Center(
       child: FutureBuilder(
         future: WouldYouBuyItService().getHouse(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<House> snapshot) {
           List<Widget> children;
           if(snapshot.hasData) {
-            var house = snapshot.data as House;
+            var house = snapshot.data;
             children = <Widget>[
               Text('Year: ${house.year}'),
               Text('EnergyClass: ${house.energyClass}'),
