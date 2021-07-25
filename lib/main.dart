@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:would_you_buy_it/services/WouldYouBuyItService.dart';
 import 'package:would_you_buy_it/widgets/description.dart';
+
+import 'models/house.dart';
 
 void main() {
   runApp(MyApp());
@@ -35,7 +38,34 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: DescriptionBox(),
+      body: FutureBuilder(
+        future: WouldYouBuyItService().getHouse(),
+        builder: (BuildContext context, AsyncSnapshot<House> snapshot) {
+          List<Widget> children;
+          if(snapshot.hasData) {
+            children = <Widget>[
+              DescriptionBox(house: snapshot.data),
+            ];
+          } 
+          //Make error handling -> else if(snapshot.hasError)
+          else {
+            children = const <Widget>[
+              SizedBox(
+                child: CircularProgressIndicator(),
+                width: 60,
+                height: 60,
+              )
+            ];
+          }
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: children,
+            ),
+          );
+        },
+      ),
     );
   }
 }
