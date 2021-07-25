@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:would_you_buy_it/services/WouldYouBuyItService.dart';
+import 'package:would_you_buy_it/widgets/Alert.dart';
 import 'package:would_you_buy_it/widgets/description.dart';
 import 'package:would_you_buy_it/widgets/guessWidget.dart';
 import 'package:would_you_buy_it/widgets/imagePanel.dart';
@@ -46,7 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
           List<Widget> children;
           if(snapshot.hasData) {
             children = <Widget>[
-              Guess(onPressed: () => {}),
+              Guess(onPressed: (int guess) => showGuessDialog(context, guess, snapshot.requireData.price)),
               DescriptionBox(house: snapshot.requireData),
               ImagePanel(house: snapshot.requireData)
             ];

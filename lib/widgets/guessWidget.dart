@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class Guess extends StatelessWidget {
-  final Function() onPressed;
+  final Function(int) onPressed;
+  final TextEditingController guessController = TextEditingController();
 
   Guess({
     required this.onPressed
@@ -16,6 +17,7 @@ class Guess extends StatelessWidget {
         Container(
           width: 120,
           child: TextFormField(
+            controller: guessController,
             decoration: const InputDecoration(
               hintText: '850000',
               hintStyle: TextStyle(
@@ -33,7 +35,7 @@ class Guess extends StatelessWidget {
             borderRadius: BorderRadius.horizontal(right: Radius.circular(20))
           ),
           child: IconButton(
-          onPressed: onPressed, 
+          onPressed: () => onPressed(int.parse(guessController.text)), 
           icon: const Icon(Icons.arrow_right_alt),
           color: Colors.white,
         ),
