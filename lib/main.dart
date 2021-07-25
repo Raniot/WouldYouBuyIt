@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:would_you_buy_it/services/WouldYouBuyItService.dart';
 import 'package:would_you_buy_it/widgets/description.dart';
+import 'package:would_you_buy_it/widgets/guessWidget.dart';
+import 'package:would_you_buy_it/widgets/imagePanel.dart';
 
 import 'models/house.dart';
 
@@ -13,18 +15,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Would you buy it?',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Would you buy it?'),
       debugShowCheckedModeBanner: false,
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key? key, required this.title}) : super(key: key);
   final String title;
 
   @override
@@ -44,7 +46,9 @@ class _MyHomePageState extends State<MyHomePage> {
           List<Widget> children;
           if(snapshot.hasData) {
             children = <Widget>[
-              DescriptionBox(house: snapshot.data),
+              // Guess(onPressed: () => {}),
+              DescriptionBox(house: snapshot.requireData),
+              ImagePanel(house: snapshot.requireData)
             ];
           } 
           //Make error handling -> else if(snapshot.hasError)

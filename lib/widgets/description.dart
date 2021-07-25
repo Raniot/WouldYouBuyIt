@@ -4,7 +4,9 @@ import 'package:would_you_buy_it/models/house.dart';
 
 class DescriptionBox extends StatelessWidget {
   final House house;
-  DescriptionBox({this.house});
+  DescriptionBox({
+    required this.house
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -1,4 +1,6 @@
-import 'package:would_you_buy_it/models/image.dart';
+import 'dart:convert';
+
+import 'package:would_you_buy_it/models/imageData.dart';
 
 class House {
   String year;
@@ -11,21 +13,27 @@ class House {
   String city;
   String zipCode;
 
-  List<ImageData> imageUris;
+  List<ImageData> imageData;
 
   House({
-    this.year,
-    this.energyClass,
-    this.estateType,
-    this.livingSpace,
-    this.rooms,
-    this.municipality,
-    this.city,
-    this.zipCode,
-    this.imageUris
+    required this.year,
+    required this.energyClass,
+    required this.estateType,
+    required this.livingSpace,
+    required this.rooms,
+    required this.municipality,
+    required this.city,
+    required this.zipCode,
+    required this.imageData
   });
 
   factory House.fromJson(Map<String, dynamic> json){
+    List<ImageData> imageData = [];
+
+    for(int i = 0; i < json['images'].length; i++) {
+      imageData.add(ImageData.fromJson(json['images'][i]));
+    }
+    
     return House(
       year: json['year'],
       energyClass: json['energyClass'],
@@ -35,7 +43,7 @@ class House {
       municipality: json['municipality'],
       city: json['city'],
       zipCode: json['zipCode'],
-      imageUris: json['imageUris']
+      imageData: imageData
     );
   }
 }
