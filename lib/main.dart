@@ -45,9 +45,21 @@ class _MyHomePageState extends State<MyHomePage> {
         future: WouldYouBuyItService().getHouse(),
         builder: (BuildContext context, AsyncSnapshot<House> snapshot) {
           List<Widget> children;
-          if(snapshot.hasData) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            children = const <Widget>[
+              SizedBox(
+                child: CircularProgressIndicator(),
+                width: 60,
+                height: 60,
+              )
+            ];
+          }
+          else if(snapshot.hasData) {
             children = <Widget>[
-              Guess(onPressed: (int guess) => showGuessDialog(context, guess, snapshot.requireData.price)),
+              Guess(onPressed: (int guess) => {
+                showGuessDialog(context, guess, snapshot.requireData.price),
+                this.setState(() {})
+              }),
               DescriptionBox(house: snapshot.requireData),
               ImagePanel(house: snapshot.requireData)
             ];
