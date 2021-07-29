@@ -1,82 +1,37 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:photo_view/photo_view.dart';
-import 'package:photo_view/photo_view_gallery.dart';
-import 'package:would_you_buy_it/models/house.dart';
+import 'package:would_you_buy_it/models/imageData.dart';
+import 'package:would_you_buy_it/widgets/imageView.dart';
 
 class ImagePanel extends StatelessWidget {
-  final House house;
+  final List<ImageData> images;
   ImagePanel({
-    required this.house
+    required this.images
   });
 
   @override
   Widget build(BuildContext context){
-    var images = house.imageData;
-
     return SizedBox(
       height: 250,
       width: 300,
-      child: PhotoViewGallery.builder(
-        itemCount: images.length, 
-        pageController: PageController(initialPage: 0),
-        scrollPhysics: const BouncingScrollPhysics(),
-        builder: (BuildContext context, int index) {
-          return PhotoViewGalleryPageOptions(
-            imageProvider: NetworkImage(images[index].thumbnailUrl),
-            initialScale: PhotoViewComputedScale.contained,
-            onTapUp: (context, details, value) {
-              Navigator.push(
-                context, 
-                MaterialPageRoute(
-                  builder: (context) {
-                    return Container(
-                      child: PhotoViewGallery.builder(
-                          itemCount: images.length,
-                          pageController: PageController(initialPage: index),
-                          scrollPhysics: const BouncingScrollPhysics(),
-                          builder: (context, index) {
-                            return PhotoViewGalleryPageOptions(
-                              imageProvider: NetworkImage(images[index].largeImageUrl),
-                              initialScale: PhotoViewComputedScale.contained,
-                              onTapUp: (context, details, value) {
-                                Navigator.pop(context);
-                              }
-                            );
-                          },
-                          loadingBuilder: (context, event) => Center(
-                            child: Container(
-                              child: CircularProgressIndicator(
-                                value: event == null
-                                  ? 0
-                                  : event.cumulativeBytesLoaded / int.parse(event.expectedTotalBytes.toString())
-                              ),
-                            ),
-                          ),
-                          backgroundDecoration: BoxDecoration(
-                            color: Colors.transparent
-                          ),
-                        ),
-                    );
-                  })
-              );
-            }
-          );
+      child: ImageView(
+        images: images,
+        startingIndex: 0,
+        onTapFunc: (index) => {
+          Navigator.push(
+            context, 
+            MaterialPageRoute(
+              builder: (context) {
+                return ImageView(
+                  images: images,
+                  startingIndex: index ?? 0,
+                  onTapFunc: (index) => Navigator.pop(context),
+                );
+              }
+            )
+          )
         },
-        loadingBuilder: (context, event) => Center(
-          child: Container(
-            child: CircularProgressIndicator(
-              value: event == null
-                ? 0
-                : event.cumulativeBytesLoaded / int.parse(event.expectedTotalBytes.toString())
-            ),
-          ),
-        ),
-        backgroundDecoration: BoxDecoration(
-          color: Colors.transparent
-        ),
-      ),
+      )
     );
   }
 }

@@ -63,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
               Spacer(),
               DescriptionBox(house: snapshot.requireData),
               Spacer(),
-              ImagePanel(house: snapshot.requireData)
+              ImagePanel(images: snapshot.requireData.imageData)
             ];
           } 
           //Make error handling -> else if(snapshot.hasError)
