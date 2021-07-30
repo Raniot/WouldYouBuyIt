@@ -16,7 +16,7 @@ class ImagePanel extends StatelessWidget {
       height: 250,
       width: 300,
       child: ImageView(
-        images: images,
+        imageUrls: images.map((imageData) => imageData.lowResTabletImageUrl).toList(),
         pageController: PageController(initialPage: 0),
         onTapFunc: (index, controller) async {
           await Navigator.push(
@@ -24,7 +24,7 @@ class ImagePanel extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) {
                 return ImageView(
-                  images: images,
+                  imageUrls: images.map((imageData) => imageData.largeImageUrl).toList(),
                   pageController: PageController(initialPage: index),
                   onTapFunc: (index, controller2) {
                     Navigator.pop(context);

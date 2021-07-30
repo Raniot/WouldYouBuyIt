@@ -5,12 +5,12 @@ import 'package:photo_view/photo_view_gallery.dart';
 import 'package:would_you_buy_it/models/imageData.dart';
 
 class ImageView extends StatelessWidget {
-  final List<ImageData> images;
+  final List<String> imageUrls;
   final PageController pageController;
   final Function(int index, PageController controller)? onTapFunc;
 
   ImageView({
-    required this.images,
+    required this.imageUrls,
     required this.pageController,
     this.onTapFunc,
   });
@@ -23,12 +23,12 @@ class ImageView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: PhotoViewGallery.builder(
-          itemCount: images.length,
+          itemCount: imageUrls.length,
           pageController: pageController,
           scrollPhysics: const BouncingScrollPhysics(),
           builder: (context, index) {
             return PhotoViewGalleryPageOptions(
-              imageProvider: NetworkImage(images[index].largeImageUrl),
+              imageProvider: NetworkImage(imageUrls[index]),
               initialScale: PhotoViewComputedScale.contained,
               onTapUp: (context, details, value) => onTapFunc?.call(index, pageController)
             );
