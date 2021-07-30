@@ -5,6 +5,7 @@ import 'package:would_you_buy_it/widgets/imageView.dart';
 
 class ImagePanel extends StatelessWidget {
   final List<ImageData> images;
+
   ImagePanel({
     required this.images
   });
@@ -16,20 +17,23 @@ class ImagePanel extends StatelessWidget {
       width: 300,
       child: ImageView(
         images: images,
-        startingIndex: 0,
-        onTapFunc: (index) => {
-          Navigator.push(
+        pageController: PageController(initialPage: 0),
+        onTapFunc: (index, controller) async {
+          await Navigator.push(
             context, 
             MaterialPageRoute(
               builder: (context) {
                 return ImageView(
                   images: images,
-                  startingIndex: index ?? 0,
-                  onTapFunc: (index) => Navigator.pop(context),
+                  pageController: PageController(initialPage: index),
+                  onTapFunc: (index, controller2) {
+                    Navigator.pop(context);
+                    controller.jumpToPage(index);
+                  },
                 );
               }
             )
-          )
+          );
         },
       )
     );

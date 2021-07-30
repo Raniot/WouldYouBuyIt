@@ -6,27 +6,31 @@ import 'package:would_you_buy_it/models/imageData.dart';
 
 class ImageView extends StatelessWidget {
   final List<ImageData> images;
-  final int startingIndex;
-  final Function(int? index)? onTapFunc;
+  final PageController pageController;
+  final Function(int index, PageController controller)? onTapFunc;
 
   ImageView({
     required this.images,
-    required this.startingIndex,
-    this.onTapFunc
+    required this.pageController,
+    this.onTapFunc,
   });
+
+  void changeToPage(int page) {
+    pageController.jumpToPage(page);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: PhotoViewGallery.builder(
           itemCount: images.length,
-          pageController: PageController(initialPage: startingIndex),
+          pageController: pageController,
           scrollPhysics: const BouncingScrollPhysics(),
           builder: (context, index) {
             return PhotoViewGalleryPageOptions(
               imageProvider: NetworkImage(images[index].largeImageUrl),
               initialScale: PhotoViewComputedScale.contained,
-              onTapUp: (context, details, value) => onTapFunc?.call(index)
+              onTapUp: (context, details, value) => onTapFunc?.call(index, pageController)
             );
           },
           loadingBuilder: (context, event) => Center(
