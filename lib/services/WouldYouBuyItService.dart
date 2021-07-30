@@ -5,10 +5,13 @@ import 'package:http/http.dart' as http;
 
 class WouldYouBuyItService {
   Future<House> getHouse() async {
-    var response = await http.get(Uri.parse('https://wouldyoubuyitapi.azurewebsites.net/api/house'));
-    if(response.statusCode != 200)
-      throw new Exception('Error from backend ${response.body}');
-    
-    return House.fromJson(jsonDecode(response.body));
+    for(int i = 0; i < 5; i ++) {
+      var response = await http.get(Uri.parse('https://wouldyoubuyitapi.azurewebsites.net/api/house'));
+      if(response.statusCode == 200) {
+        return House.fromJson(jsonDecode(response.body));
+      }
+    }
+
+    throw Exception("Error fetching house");
   }
 }

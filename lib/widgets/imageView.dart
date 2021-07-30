@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
-import 'package:would_you_buy_it/models/imageData.dart';
 
 class ImageView extends StatelessWidget {
   final List<String> imageUrls;
