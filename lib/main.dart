@@ -38,6 +38,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late Future<House> _future;
+  var score = 0;
+  var guesses = 0;
+  var totalScore = 0;
 
   @override
   void initState() {
@@ -99,11 +102,13 @@ class _MyHomePageState extends State<MyHomePage> {
       Column(
         children: [
           Guess(
-              onPressed: (int guess) => {
-                    showGuessDialog(context, guess, snapshot.requireData.price),
+              onPressed: (int guess) {
+                    totalScore += (guess - snapshot.requireData.price).abs();
+                    score = totalScore ~/ ++guesses;
+                    showGuessDialog(context, guess, snapshot.requireData.price, score);
                     this.setState(() {
                       _future = WouldYouBuyItService().getHouse();
-                    })
+                    });
                   }),
           Spacer(),
           DescriptionBox(house: snapshot.requireData),
@@ -131,11 +136,13 @@ class _MyHomePageState extends State<MyHomePage> {
       Column(
         children: [
           Guess(
-              onPressed: (int guess) => {
-                    showGuessDialog(context, guess, snapshot.requireData.price),
+              onPressed: (int guess) {
+                    totalScore += (guess - snapshot.requireData.price).abs();
+                    score = totalScore ~/ ++guesses;
+                    showGuessDialog(context, guess, snapshot.requireData.price, score);
                     this.setState(() {
                       _future = WouldYouBuyItService().getHouse();
-                    })
+                    });
                   }),
           Spacer(),
           DescriptionBox(house: snapshot.requireData),

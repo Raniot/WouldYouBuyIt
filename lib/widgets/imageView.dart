@@ -29,7 +29,8 @@ class ImageView extends StatelessWidget {
             return PhotoViewGalleryPageOptions(
               imageProvider: NetworkImage(imageUrls[index]),
               initialScale: PhotoViewComputedScale.contained,
-              onTapUp: (context, details, value) => onTapFunc?.call(index, pageController)
+              onTapUp: (context, details, value) => onTapFunc?.call(index, pageController),
+              minScale: PhotoViewComputedScale.contained
             );
           },
           loadingBuilder: (context, event) => Center(
