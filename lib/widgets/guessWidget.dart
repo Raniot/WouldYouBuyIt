@@ -28,7 +28,7 @@ class Guess extends StatelessWidget {
               ),
               labelText: 'Guess the price'
             ),
-            keyboardType: TextInputType.number,
+            // keyboardType: TextInputType.number, Something is wrong with this shit!!!
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             onChanged: (text) {
               if(text == '') return;

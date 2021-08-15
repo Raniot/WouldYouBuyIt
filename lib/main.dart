@@ -5,6 +5,7 @@ import 'package:would_you_buy_it/widgets/Alert.dart';
 import 'package:would_you_buy_it/widgets/description.dart';
 import 'package:would_you_buy_it/widgets/guessWidget.dart';
 import 'package:would_you_buy_it/widgets/imagePanel.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'models/house.dart';
 
@@ -59,71 +60,20 @@ class _MyHomePageState extends State<MyHomePage> {
               List<Widget> children;
               if (snapshot.connectionState != ConnectionState.done) {
                 children = const <Widget>[
-                  SizedBox(
-                    child: CircularProgressIndicator(),
-                    width: 60,
-                    height: 60,
-                  )
+                  CircularProgressIndicator(),
                 ];
               } else if (snapshot.hasData) {
                 children = orientation == Orientation.portrait
-                    ? [
-                        Column(
-                          children: [
-                            Guess(
-                                onPressed: (int guess) => {
-                                      showGuessDialog(context, guess,
-                                          snapshot.requireData.price),
-                                      this.setState(() {
-                                        _future =
-                                            WouldYouBuyItService().getHouse();
-                                      })
-                                    }),
-                            Spacer(),
-                            DescriptionBox(house: snapshot.requireData),
-                            Spacer(),
-                            ImagePanel(
-                              images: snapshot.requireData.imageData,
-                              height: MediaQuery.of(context).size.height * 0.33,
-                              width: MediaQuery.of(context).size.width * 0.9,
-                            )
-                          ],
-                        )
-                      ]
-                    : [
-                        Spacer(),
-                        Column(
-                          children: [
-                            Guess(
-                                onPressed: (int guess) => {
-                                      showGuessDialog(context, guess,
-                                          snapshot.requireData.price),
-                                      this.setState(() {
-                                        _future =
-                                            WouldYouBuyItService().getHouse();
-                                      })
-                                    }),
-                            Spacer(),
-                            DescriptionBox(house: snapshot.requireData),
-                            Spacer(),
-                          ],
-                        ),
-                        Spacer(),
-                        Column(
-                          children: [
-                            Spacer(),
-                            ImagePanel(
-                              images: snapshot.requireData.imageData,
-                              height:
-                                  MediaQuery.of(context).size.height * 0.741,
-                              width: MediaQuery.of(context).size.width * 0.5,
-                            ),
-                            Spacer(),
-                          ],
-                        )
-                      ];
+                    ? portraitMode(context, snapshot)
+                    : landscapeMode(context, snapshot);
               }
-              //Make error handling -> else if(snapshot.hasError)
+              else if(snapshot.hasError) {
+                children = [];
+                Fluttertoast.showToast(msg: 'Error - Failed to fetch house, retrying...');
+                setState(() {
+                  _future = WouldYouBuyItService().getHouse();
+                });
+              }
               else {
                 children = const <Widget>[
                   CircularProgressIndicator(),
@@ -138,6 +88,65 @@ class _MyHomePageState extends State<MyHomePage> {
               );
             },
           );
-        }));
+        })
+    );
+  }
+
+  List<Widget> landscapeMode(
+      BuildContext context, AsyncSnapshot<House> snapshot) {
+    return [
+      Spacer(),
+      Column(
+        children: [
+          Guess(
+              onPressed: (int guess) => {
+                    showGuessDialog(context, guess, snapshot.requireData.price),
+                    this.setState(() {
+                      _future = WouldYouBuyItService().getHouse();
+                    })
+                  }),
+          Spacer(),
+          DescriptionBox(house: snapshot.requireData),
+          Spacer(),
+        ],
+      ),
+      Spacer(),
+      Column(
+        children: [
+          Spacer(),
+          ImagePanel(
+            images: snapshot.requireData.imageData,
+            height: MediaQuery.of(context).size.height * 0.741,
+            width: MediaQuery.of(context).size.width * 0.5,
+          ),
+          Spacer(),
+        ],
+      )
+    ];
+  }
+
+  List<Widget> portraitMode(
+      BuildContext context, AsyncSnapshot<House> snapshot) {
+    return [
+      Column(
+        children: [
+          Guess(
+              onPressed: (int guess) => {
+                    showGuessDialog(context, guess, snapshot.requireData.price),
+                    this.setState(() {
+                      _future = WouldYouBuyItService().getHouse();
+                    })
+                  }),
+          Spacer(),
+          DescriptionBox(house: snapshot.requireData),
+          Spacer(),
+          ImagePanel(
+            images: snapshot.requireData.imageData,
+            height: MediaQuery.of(context).size.height * 0.33,
+            width: MediaQuery.of(context).size.width * 0.9,
+          )
+        ],
+      )
+    ];
   }
 }
