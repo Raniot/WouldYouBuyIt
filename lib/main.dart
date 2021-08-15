@@ -135,6 +135,15 @@ class _MyHomePageState extends State<MyHomePage> {
     return [
       Column(
         children: [
+          Spacer(),
+          ImagePanel(
+            images: snapshot.requireData.imageData,
+            height: MediaQuery.of(context).size.height * 0.33,
+            width: MediaQuery.of(context).size.width * 0.9,
+          ),
+          Spacer(),
+          DescriptionBox(house: snapshot.requireData),
+          Spacer(),
           Guess(
               onPressed: (int guess) {
                     totalScore += (guess - snapshot.requireData.price).abs();
@@ -145,13 +154,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     });
                   }),
           Spacer(),
-          DescriptionBox(house: snapshot.requireData),
-          Spacer(),
-          ImagePanel(
-            images: snapshot.requireData.imageData,
-            height: MediaQuery.of(context).size.height * 0.33,
-            width: MediaQuery.of(context).size.width * 0.9,
-          )
         ],
       )
     ];
