@@ -30,6 +30,7 @@ class Guess extends StatelessWidget {
             ),
             // keyboardType: TextInputType.number, Something is wrong with this shit!!!
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            onSubmitted: (text) => onPressed(int.parse(guessController.text.replaceAll(',', ''))),
             onChanged: (text) {
               if(text == '') return;
               final formatted = NumberFormat('###,###').format(int.parse(text.replaceAll(',', '')));

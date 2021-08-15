@@ -101,15 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
       Spacer(),
       Column(
         children: [
-          Guess(
-              onPressed: (int guess) {
-                    totalScore += (guess - snapshot.requireData.price).abs();
-                    score = totalScore ~/ ++guesses;
-                    showGuessDialog(context, guess, snapshot.requireData.price, score);
-                    this.setState(() {
-                      _future = WouldYouBuyItService().getHouse();
-                    });
-                  }),
+          guessDialog(snapshot, context),
           Spacer(),
           DescriptionBox(house: snapshot.requireData),
           Spacer(),
@@ -142,20 +134,24 @@ class _MyHomePageState extends State<MyHomePage> {
             width: MediaQuery.of(context).size.width * 0.9,
           ),
           Spacer(),
-          DescriptionBox(house: snapshot.requireData),
+          guessDialog(snapshot, context),
           Spacer(),
-          Guess(
-              onPressed: (int guess) {
-                    totalScore += (guess - snapshot.requireData.price).abs();
-                    score = totalScore ~/ ++guesses;
-                    showGuessDialog(context, guess, snapshot.requireData.price, score);
-                    this.setState(() {
-                      _future = WouldYouBuyItService().getHouse();
-                    });
-                  }),
+          DescriptionBox(house: snapshot.requireData),
           Spacer(),
         ],
       )
     ];
+  }
+
+  Guess guessDialog(AsyncSnapshot<House> snapshot, BuildContext context) {
+    return Guess(
+            onPressed: (int guess) {
+                  totalScore += (guess - snapshot.requireData.price).abs();
+                  score = totalScore ~/ ++guesses;
+                  showGuessDialog(context, guess, snapshot.requireData.price, score);
+                  this.setState(() {
+                    _future = WouldYouBuyItService().getHouse();
+                  });
+                });
   }
 }
