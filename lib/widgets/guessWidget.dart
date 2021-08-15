@@ -28,9 +28,12 @@ class Guess extends StatelessWidget {
               ),
               labelText: 'Guess the price'
             ),
-            // keyboardType: TextInputType.number, Something is wrong with this shit!!!
+            // keyboardType: TextInputType.number, // Something is wrong with this shit!!!
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            onSubmitted: (text) => onPressed(int.parse(guessController.text.replaceAll(',', ''))),
+            onSubmitted: (text) {
+              if(text == '') return;
+              onPressed(int.parse(guessController.text.replaceAll(',', '')));
+            },
             onChanged: (text) {
               if(text == '') return;
               final formatted = NumberFormat('###,###').format(int.parse(text.replaceAll(',', '')));

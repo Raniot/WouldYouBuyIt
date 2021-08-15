@@ -14,11 +14,13 @@ class DescriptionBox extends StatelessWidget {
               Text('Year: ${house.year}'),
               Text('EnergyClass: ${house.energyClass}'),
               Text('EstateType: ${house.estateType}'),
+              house.expenses != 0 ? Text('Expenses: ${house.expenses} kr./month') : SizedBox.shrink(),
               Text('LivingSpace: ${house.livingSpace}'),
               Text('Rooms: ${house.rooms}'),
+              house.floor != '' ? Text('Floor: ${house.floor}') : SizedBox.shrink(),
               Text('Municipality: ${house.municipality}'),
               Text('City: ${house.city}'),
-              Text('Zipcode: ${house.zipCode}')
+              Text('Zipcode: ${house.zipCode}'),
     ]);
   }
 }

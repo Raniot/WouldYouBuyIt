@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:would_you_buy_it/models/imageData.dart';
 
 class House {
@@ -8,6 +6,8 @@ class House {
   final String estateType;
   final String livingSpace;
   final String rooms;
+  final String floor;
+  final int expenses;
 
   final String municipality;
   final String city;
@@ -27,7 +27,9 @@ class House {
     required this.city,
     required this.zipCode,
     required this.imageData,
-    required this.price
+    required this.price,
+    this.expenses = 0,
+    this.floor = '',
   });
 
   factory House.fromJson(Map<String, dynamic> json){
@@ -43,11 +45,13 @@ class House {
       estateType: json['estateType'],
       livingSpace: json['livingSpace'],
       rooms: json['rooms'],
+      floor: json['floor'] ?? '',
       municipality: json['municipality'],
       city: json['city'],
       zipCode: json['zipCode'],
       imageData: imageData,
-      price: int.parse(json['price'])
+      expenses: json['monthlyExpenses'],
+      price: json['price'],
     );
   }
 }
