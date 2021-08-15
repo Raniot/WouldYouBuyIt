@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:would_you_buy_it/services/WouldYouBuyItService.dart';
 import 'package:would_you_buy_it/widgets/Alert.dart';
 import 'package:would_you_buy_it/widgets/description.dart';
@@ -35,52 +36,108 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  late Future<House> _future;
+
+  @override
+  void initState() {
+    super.initState();
+    _future = WouldYouBuyItService().getHouse();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: FutureBuilder(
-        future: WouldYouBuyItService().getHouse(),
-        builder: (BuildContext context, AsyncSnapshot<House> snapshot) {
-          List<Widget> children;
-          if (snapshot.connectionState != ConnectionState.done) {
-            children = const <Widget>[
-              SizedBox(
-                child: CircularProgressIndicator(),
-                width: 60,
-                height: 60,
-              )
-            ];
-          }
-          else if(snapshot.hasData) {
-            children = <Widget>[
-              Guess(onPressed: (int guess) => {
-                showGuessDialog(context, guess, snapshot.requireData.price),
-                this.setState(() {})
-              }),
-              Spacer(),
-              DescriptionBox(house: snapshot.requireData),
-              Spacer(),
-              ImagePanel(images: snapshot.requireData.imageData)
-            ];
-          } 
-          //Make error handling -> else if(snapshot.hasError)
-          else {
-            children = const <Widget>[
-              CircularProgressIndicator(),
-            ];
-          }
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: children,
-            ),
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          toolbarHeight: 0,
+          backgroundColor: Colors.orange,
+        ),
+        body: OrientationBuilder(builder: (context, orientation) {
+          return FutureBuilder(
+            future: _future,
+            builder: (BuildContext context, AsyncSnapshot<House> snapshot) {
+              List<Widget> children;
+              if (snapshot.connectionState != ConnectionState.done) {
+                children = const <Widget>[
+                  SizedBox(
+                    child: CircularProgressIndicator(),
+                    width: 60,
+                    height: 60,
+                  )
+                ];
+              } else if (snapshot.hasData) {
+                children = orientation == Orientation.portrait
+                    ? [
+                        Column(
+                          children: [
+                            Guess(
+                                onPressed: (int guess) => {
+                                      showGuessDialog(context, guess,
+                                          snapshot.requireData.price),
+                                      this.setState(() {
+                                        _future =
+                                            WouldYouBuyItService().getHouse();
+                                      })
+                                    }),
+                            Spacer(),
+                            DescriptionBox(house: snapshot.requireData),
+                            Spacer(),
+                            ImagePanel(
+                              images: snapshot.requireData.imageData,
+                              height: MediaQuery.of(context).size.height * 0.33,
+                              width: MediaQuery.of(context).size.width * 0.9,
+                            )
+                          ],
+                        )
+                      ]
+                    : [
+                        Spacer(),
+                        Column(
+                          children: [
+                            Guess(
+                                onPressed: (int guess) => {
+                                      showGuessDialog(context, guess,
+                                          snapshot.requireData.price),
+                                      this.setState(() {
+                                        _future =
+                                            WouldYouBuyItService().getHouse();
+                                      })
+                                    }),
+                            Spacer(),
+                            DescriptionBox(house: snapshot.requireData),
+                            Spacer(),
+                          ],
+                        ),
+                        Spacer(),
+                        Column(
+                          children: [
+                            Spacer(),
+                            ImagePanel(
+                              images: snapshot.requireData.imageData,
+                              height:
+                                  MediaQuery.of(context).size.height * 0.741,
+                              width: MediaQuery.of(context).size.width * 0.5,
+                            ),
+                            Spacer(),
+                          ],
+                        )
+                      ];
+              }
+              //Make error handling -> else if(snapshot.hasError)
+              else {
+                children = const <Widget>[
+                  CircularProgressIndicator(),
+                ];
+              }
+              return Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: children,
+                ),
+              );
+            },
           );
-        },
-      ),
-    );
+        }));
   }
 }
