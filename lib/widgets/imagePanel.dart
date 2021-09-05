@@ -32,9 +32,9 @@ class ImagePanel extends StatelessWidget {
                   return ImageView(
                     imageUrls: images.map((imageData) => imageData.largeImageUrl).toList(),
                     pageController: PageController(initialPage: index),
-                    onTapFunc: (index, controller2) {
+                    onTapFunc: (fullScreenIndex, fullScreenController) {
                       Navigator.pop(context);
-                      controller.jumpToPage(index);
+                      controller.jumpToPage(fullScreenIndex);
                     },
                   );
                 }
