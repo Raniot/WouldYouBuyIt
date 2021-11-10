@@ -1,5 +1,6 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:would_you_buy_it/services/WouldYouBuyItService.dart';
 import 'package:would_you_buy_it/widgets/Alert.dart';
 import 'package:would_you_buy_it/widgets/description.dart';
@@ -38,9 +39,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late Future<House> _future;
-  var score = 0;
-  var guesses = 0;
-  var totalScore = 0;
+  var avgScore = 0.0;
+  var guesses = 0.0;
+  var totalScore = 0.0;
 
   @override
   void initState() {
@@ -146,9 +147,9 @@ class _MyHomePageState extends State<MyHomePage> {
   Guess guessDialog(AsyncSnapshot<House> snapshot, BuildContext context) {
     return Guess(
             onPressed: (int guess) {
-                  totalScore += (guess - snapshot.requireData.price).abs();
-                  score = totalScore ~/ ++guesses;
-                  showGuessDialog(context, guess, snapshot.requireData.price, score);
+                  totalScore += min(((guess - snapshot.requireData.price).abs()*10)/snapshot.requireData.price, 10);
+                  avgScore = totalScore / ++guesses;
+                  showGuessDialog(context, guess, snapshot.requireData.price, avgScore);
                   this.setState(() {
                     _future = WouldYouBuyItService().getHouse();
                   });
