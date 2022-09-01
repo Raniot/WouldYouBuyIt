@@ -5,7 +5,7 @@ import 'package:would_you_buy_it/rest/jsonObjectMapper.dart';
 import '../models/house.dart';
 
 Future<House> fetchHouse() async {
-  return await fetch('https://wouldyoubuyitapi.azurewebsites.net/api/house', House.fromJsonObject);
+  return await fetch('https://wouldyoubuyitapi.azurewebsites.net/api/house', House.fromJson);
 }
 
 Future<T> fetch<T>(String uri, T Function(JsonObject json) mapper) async {

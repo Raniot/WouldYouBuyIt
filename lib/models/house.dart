@@ -33,30 +33,7 @@ class House {
     this.floor = '',
   });
 
-  factory House.fromJson(Map<String, dynamic> json){
-    List<ImageData> imageData = [];
-
-    for(int i = 0; i < json['images'].length; i++) {
-      imageData.add(ImageData.fromJson(json['images'][i]));
-    }
-    
-    return House(
-      year: json['year'],
-      energyClass: json['energyClass'],
-      estateType: json['estateType'],
-      livingSpace: json['livingSpace'],
-      rooms: json['rooms'],
-      floor: json['floor'] ?? '',
-      municipality: json['municipality'],
-      city: json['city'],
-      zipCode: json['zipCode'],
-      imageData: imageData,
-      expenses: json['monthlyExpenses'],
-      price: json['price'],
-    );
-  }
-
-  factory House.fromJsonObject(JsonObject json) {
+  factory House.fromJson(JsonObject json) {
     return House(
       year: json.mandatoryString('year'),
       energyClass: json.mandatoryString('energyClass'),
@@ -67,7 +44,7 @@ class House {
       municipality: json.mandatoryString('municipality'),
       city: json.mandatoryString('city'),
       zipCode: json.mandatoryString('zipCode'),
-      imageData: json.objectList('images', (json) => ImageData.fromJsonObject(json)),
+      imageData: json.objectList('images', (json) => ImageData.fromJson(json)),
       expenses: json.mandatoryInteger('monthlyExpenses'),
       price: json.mandatoryInteger('price'),
     );

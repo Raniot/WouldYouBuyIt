@@ -13,16 +13,7 @@ class ImageData {
     required this.type
   });
 
-  factory ImageData.fromJson(Map<String, dynamic> json) {
-    return ImageData(
-      largeImageUrl: json['largeImageUrl'],
-      lowResTabletImageUrl: json['lowResTabletImageUrl'],
-      thumbnailUrl: json['thumbnailUrl'],
-      type: json['type'],
-    );
-  }
-
-  factory ImageData.fromJsonObject(JsonObject json) {
+  factory ImageData.fromJson(JsonObject json) {
     return ImageData(
       largeImageUrl: json.mandatoryString('largeImageUrl'), 
       lowResTabletImageUrl: json.mandatoryString('lowResTabletImageUrl'), 
