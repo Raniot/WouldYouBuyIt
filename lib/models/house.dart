@@ -1,4 +1,5 @@
 import 'package:would_you_buy_it/models/imageData.dart';
+import 'package:would_you_buy_it/rest/json.dart';
 
 class House {
   final String year;
@@ -52,6 +53,23 @@ class House {
       imageData: imageData,
       expenses: json['monthlyExpenses'],
       price: json['price'],
+    );
+  }
+
+  factory House.fromJsonObject(JsonObject json) {
+    return House(
+      year: json.mandatoryString('year'),
+      energyClass: json.mandatoryString('energyClass'),
+      estateType: json.mandatoryString('estateType'),
+      livingSpace: json.mandatoryString('livingSpace'),
+      rooms: json.mandatoryString('rooms'),
+      floor: json.string('floor') ?? '',
+      municipality: json.mandatoryString('municipality'),
+      city: json.mandatoryString('city'),
+      zipCode: json.mandatoryString('zipCode'),
+      imageData: json.objectList('images', (json) => ImageData.fromJsonObject(json)),
+      expenses: json.mandatoryInteger('monthlyExpenses'),
+      price: json.mandatoryInteger('price'),
     );
   }
 }

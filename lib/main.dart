@@ -18,12 +18,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    const title = 'Would you buy it?';
     return MaterialApp(
-      title: 'Would you buy it?',
+      title: title,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Would you buy it?'),
+      home: MyHomePage(title: title),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -46,7 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    _future = WouldYouBuyItService().getHouse();
+    _future = fetchHouse();
   }
 
   @override
@@ -75,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 children = [];
                 Fluttertoast.showToast(msg: 'Error - Failed to fetch house, retrying...');
                 setState(() {
-                  _future = WouldYouBuyItService().getHouse();
+                  _future = fetchHouse();
                 });
               }
               else {
@@ -151,7 +152,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   avgScore = totalScore / ++guesses;
                   showGuessDialog(context, guess, snapshot.requireData.price, avgScore);
                   this.setState(() {
-                    _future = WouldYouBuyItService().getHouse();
+                    _future = fetchHouse();
                   });
                 });
   }
