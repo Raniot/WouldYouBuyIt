@@ -1,57 +1,57 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:would_you_buy_it/services/WouldYouBuyItService.dart';
-import 'package:would_you_buy_it/widgets/Alert.dart';
+import 'package:would_you_buy_it/state/game.dart';
+import 'package:would_you_buy_it/state/user.dart';
 import 'package:would_you_buy_it/widgets/description.dart';
 import 'package:would_you_buy_it/widgets/guessWidget.dart';
 import 'package:would_you_buy_it/widgets/imagePanel.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import 'models/house.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(HousePriceGuesser());
 }
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+class HousePriceGuesser extends StatelessWidget {
+  final state = new GameState(
+    users: [new User(id: '1', name: 'Player 1')],
+    roundsToPlay: 5,
+  );
+
   @override
   Widget build(BuildContext context) {
     const title = 'Would you buy it?';
+    state.startRound();
+
     return MaterialApp(
       title: title,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: title),
+      home: GameBoard(
+        title: title,
+        state: state,
+      ),
       debugShowCheckedModeBanner: false,
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
+class GameBoard extends StatefulWidget {
+  GameBoard({Key? key, required this.title, required this.state})
+      : super(key: key);
   final String title;
+  final GameState state;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _GameBoardState createState() => _GameBoardState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  late Future<House> _future;
-  var avgScore = 0.0;
-  var guesses = 0.0;
-  var totalScore = 0.0;
-
-  @override
-  void initState() {
-    super.initState();
-    _future = fetchHouse();
-  }
-
+class _GameBoardState extends State<GameBoard> {
   @override
   Widget build(BuildContext context) {
+    final guessDialog = Guess(onPressed: (guess) {
+      widget.state.makeGuess('1', guess);
+    });
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
@@ -59,31 +59,18 @@ class _MyHomePageState extends State<MyHomePage> {
           backgroundColor: Colors.orange,
         ),
         body: OrientationBuilder(builder: (context, orientation) {
-          return FutureBuilder(
-            future: _future,
-            builder: (BuildContext context, AsyncSnapshot<House> snapshot) {
-              List<Widget> children;
-              if (snapshot.connectionState != ConnectionState.done) {
-                children = const <Widget>[
-                  CircularProgressIndicator(),
-                ];
-              } else if (snapshot.hasData) {
+          return ValueListenableBuilder(
+            valueListenable: widget.state.house,
+            builder: (context, house, child) {
+              final List<Widget> children;
+              if (house == null) {
+                children = [CircularProgressIndicator()];
+              } else {
                 children = orientation == Orientation.portrait
-                    ? portraitMode(context, snapshot)
-                    : landscapeMode(context, snapshot);
+                    ? portraitMode(context, house, guessDialog)
+                    : landscapeMode(context, house, guessDialog);
               }
-              else if(snapshot.hasError) {
-                children = [];
-                Fluttertoast.showToast(msg: 'Error - Failed to fetch house, retrying...');
-                setState(() {
-                  _future = fetchHouse();
-                });
-              }
-              else {
-                children = const <Widget>[
-                  CircularProgressIndicator(),
-                ];
-              }
+
               return Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -93,19 +80,17 @@ class _MyHomePageState extends State<MyHomePage> {
               );
             },
           );
-        })
-    );
+        }));
   }
 
-  List<Widget> landscapeMode(
-      BuildContext context, AsyncSnapshot<House> snapshot) {
+  List<Widget> landscapeMode(BuildContext context, House house, Widget guess) {
     return [
       Spacer(),
       Column(
         children: [
-          guessDialog(snapshot, context),
+          guess,
           Spacer(),
-          DescriptionBox(house: snapshot.requireData),
+          DescriptionBox(house: house),
           Spacer(),
         ],
       ),
@@ -114,7 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
         children: [
           Spacer(),
           ImagePanel(
-            images: snapshot.requireData.imageData,
+            images: house.imageData,
             height: MediaQuery.of(context).size.height * 0.741,
             width: MediaQuery.of(context).size.width * 0.5,
           ),
@@ -124,36 +109,23 @@ class _MyHomePageState extends State<MyHomePage> {
     ];
   }
 
-  List<Widget> portraitMode(
-      BuildContext context, AsyncSnapshot<House> snapshot) {
+  List<Widget> portraitMode(BuildContext context, House house, Widget guess) {
     return [
       Column(
         children: [
           Spacer(),
           ImagePanel(
-            images: snapshot.requireData.imageData,
+            images: house.imageData,
             height: MediaQuery.of(context).size.height * 0.33,
             width: MediaQuery.of(context).size.width * 0.9,
           ),
           Spacer(),
-          guessDialog(snapshot, context),
+          guess,
           Spacer(),
-          DescriptionBox(house: snapshot.requireData),
+          DescriptionBox(house: house),
           Spacer(),
         ],
       )
     ];
-  }
-
-  Guess guessDialog(AsyncSnapshot<House> snapshot, BuildContext context) {
-    return Guess(
-            onPressed: (int guess) {
-                  totalScore += min(((guess - snapshot.requireData.price).abs()*10)/snapshot.requireData.price, 10);
-                  avgScore = totalScore / ++guesses;
-                  showGuessDialog(context, guess, snapshot.requireData.price, avgScore);
-                  this.setState(() {
-                    _future = fetchHouse();
-                  });
-                });
   }
 }
