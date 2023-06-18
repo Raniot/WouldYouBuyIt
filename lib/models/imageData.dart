@@ -1,5 +1,3 @@
-import 'package:would_you_buy_it/rest/json.dart';
-
 class ImageData {
   String largeImageUrl;
   String lowResTabletImageUrl;
@@ -19,15 +17,6 @@ class ImageData {
       lowResTabletImageUrl: json['lowResTabletImageUrl'],
       thumbnailUrl: json['thumbnailUrl'],
       type: json['type'],
-    );
-  }
-
-  factory ImageData.fromJsonObject(JsonObject json) {
-    return ImageData(
-      largeImageUrl: json.mandatoryString('largeImageUrl'), 
-      lowResTabletImageUrl: json.mandatoryString('lowResTabletImageUrl'), 
-      thumbnailUrl: json.mandatoryString('thumbnailUrl'), 
-      type: json.mandatoryString('type'),
     );
   }
 }
