@@ -1,13 +1,13 @@
 import 'package:would_you_buy_it/models/imageData.dart';
 
-class House {
+class Estate {
   final String year;
   final String energyClass;
   final String estateType;
   final String livingSpace;
   final String rooms;
   final String floor;
-  final int expenses;
+  final double expenses;
 
   final String municipality;
   final String city;
@@ -15,9 +15,9 @@ class House {
 
   final List<ImageData> imageData;
 
-  final int price;
+  final double price;
 
-  House({
+  Estate({
     required this.year,
     required this.energyClass,
     required this.estateType,
@@ -32,14 +32,14 @@ class House {
     this.floor = '',
   });
 
-  factory House.fromJson(Map<String, dynamic> json){
+  factory Estate.fromJson(Map<String, dynamic> json){
     List<ImageData> imageData = [];
 
     for(int i = 0; i < json['images'].length; i++) {
       imageData.add(ImageData.fromJson(json['images'][i]));
     }
     
-    return House(
+    return Estate(
       year: json['year'],
       energyClass: json['energyClass'],
       estateType: json['estateType'],

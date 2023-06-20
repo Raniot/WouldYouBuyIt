@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 class Guess extends StatelessWidget {
-  final Function(int) onPressed;
+  final Function(double) onPressed;
   final guessController = TextEditingController();
 
   Guess({
@@ -32,7 +32,7 @@ class Guess extends StatelessWidget {
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             onSubmitted: (text) {
               if(text == '') return;
-              onPressed(int.parse(guessController.text.replaceAll(',', '')));
+              onPressed(double.parse(guessController.text.replaceAll(',', '')));
             },
             onChanged: (text) {
               if(text == '') return;
@@ -50,7 +50,7 @@ class Guess extends StatelessWidget {
             borderRadius: BorderRadius.horizontal(right: Radius.circular(20))
           ),
           child: IconButton(
-          onPressed: () => onPressed(int.parse(guessController.text.replaceAll(',', ''))), 
+          onPressed: () => onPressed(double.parse(guessController.text.replaceAll(',', ''))), 
           icon: const Icon(Icons.arrow_right_alt),
           color: Colors.white,
         ),

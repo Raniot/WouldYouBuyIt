@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:would_you_buy_it/models/house.dart';
+import 'package:would_you_buy_it/models/estate.dart';
 
 class DescriptionBox extends StatelessWidget {
-  final House house;
+  final Estate house;
   DescriptionBox({
     required this.house
   });
